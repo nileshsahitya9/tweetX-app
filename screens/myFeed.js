@@ -67,8 +67,6 @@ const MyFeed = (props) => {
     }
   };
 
-  if (userData.length === 0) {
-  }
   return (
     <SafeAreaView style={styles.mainContainer}>
       {userData.length !== 0 ? (
@@ -82,7 +80,7 @@ const MyFeed = (props) => {
               post_description={itemData.item.userPost}
             />
           )}
-          onRefresh={() => onRefresh}
+          onRefresh={onRefresh}
           refreshing={isItemLoading}
         />
       ) : (

@@ -43,11 +43,11 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     paddingLeft: 40,
+    paddingTop: 40,
     paddingRight: 40,
-    paddingTop: 10,
     justifyContent: "center",
     backgroundColor: "white",
-    paddingBottom: 50,
+    paddingBottom: 40,
     alignItems: "center",
   },
   buttonContainer: {

@@ -6,6 +6,8 @@ import {
   View,
   StyleSheet,
   Text,
+  RefreshControl,
+  ScrollView,
 } from "react-native";
 
 import UserListItem from "../components/userListItem";
@@ -47,15 +49,6 @@ const Users = (props) => {
       </View>
     );
   }
-
-  if (userData.length === 0) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>No Users Found</Text>
-      </View>
-    );
-  }
-
   const handleStartFollowing = async (name, followerid) => {
     try {
       let res = await dispatch(addFollowingUser(name, followerid));
@@ -68,13 +61,13 @@ const Users = (props) => {
       ]);
     }
   };
-
-  const handleSwitchScreen = (id, name, enable, date) => {
+  const handleSwitchScreen = (id, name, enable, date, acha) => {
     props.navigation.navigate("AnotherUserProfile", {
       userId: id,
       userName: name,
       userEnable: enable,
       userDate: date,
+      callFunction: acha,
     });
   };
 
@@ -92,34 +85,50 @@ const Users = (props) => {
   };
 
   return (
-    <SafeAreaView style={{ paddingTop: 20 }}>
-      <FlatList
-        data={userData}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={(itemData) => (
-          <UserListItem
-            name={itemData.item.userEmail}
-            userId={itemData.item.userId}
-            following={itemData.item.enable}
-            onSelect={() =>
-              handleStartFollowing(
-                itemData.item.userEmail,
-                itemData.item.userId
-              )
-            }
-            onSelectScreen={() => {
-              handleSwitchScreen(
-                itemData.item.userId,
-                itemData.item.userEmail,
-                itemData.item.enable,
-                itemData.item.userRegisterationDate
-              );
-            }}
-          />
-        )}
-        onRefresh={onRefresh}
-        refreshing={isItemLoading}
-      />
+    <SafeAreaView style={styles.mainContainer}>
+      {userData.length !== 0 ? (
+        <FlatList
+          data={userData}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={(itemData) => (
+            <UserListItem
+              name={itemData.item.userEmail}
+              userId={itemData.item.userId}
+              following={itemData.item.enable}
+              onSelect={() =>
+                handleStartFollowing(
+                  itemData.item.userEmail,
+                  itemData.item.userId
+                )
+              }
+              onSelectScreen={() => {
+                handleSwitchScreen(
+                  itemData.item.userId,
+                  itemData.item.userEmail,
+                  itemData.item.enable,
+                  itemData.item.userRegisterationDate,
+                  callyFuncy
+                );
+              }}
+            />
+          )}
+          onRefresh={onRefresh}
+          refreshing={isItemLoading}
+        />
+      ) : (
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={isItemLoading} onRefresh={onRefresh} />
+          }
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text>No Users Found...Try to Referesh</Text>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -127,6 +136,12 @@ const Users = (props) => {
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  mainContainer: {
+    flex: 1,
+    paddingTop: 20,
     justifyContent: "center",
     alignItems: "center",
   },
