@@ -61,13 +61,12 @@ const Users = (props) => {
       ]);
     }
   };
-  const handleSwitchScreen = (id, name, enable, date, acha) => {
+  const handleSwitchScreen = (id, name, enable, date) => {
     props.navigation.navigate("AnotherUserProfile", {
       userId: id,
       userName: name,
       userEnable: enable,
       userDate: date,
-      callFunction: acha,
     });
   };
 
@@ -106,8 +105,7 @@ const Users = (props) => {
                   itemData.item.userId,
                   itemData.item.userEmail,
                   itemData.item.enable,
-                  itemData.item.userRegisterationDate,
-                  callyFuncy
+                  itemData.item.userRegisterationDate
                 );
               }}
             />
